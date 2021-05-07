@@ -1,0 +1,116 @@
+code segment
+assume cs:code,ds:code,ss:code,es:code
+org 1000h
+key equ 01h
+key_f equ 03h
+ir_wr equ 00h
+st_rd equ 02h
+dr_wr equ 04h
+
+
+
+call allclr
+call crsr_home
+
+mov si,offset data
+call string
+
+l1:
+call ln2c
+call scan
+mov dl,al
+call decimal
+jmp l1
+
+data db 'tonni',00h
+
+allclr:
+mov ah,01h
+jmp out
+
+crsr_home:
+mov ah,02h
+jmp out
+
+ln2c:
+mov ah,0c0h
+
+out:
+call busy
+mov al,ah
+out ir_wr,al
+ret
+
+
+busy:
+in al,st_rd
+test al,80h
+jnz busy
+ret
+
+
+charout:
+call busy
+mov al,ah
+out dr_wr,al
+ret
+
+
+string:
+mov ah,cs:[si]
+cmp ah,00h
+je string1
+call busy
+call charout
+inc si
+jmp string
+
+string1:
+ret
+
+scan:
+in al,key_f
+test al,80h
+jnz scan
+in al,key
+and al,00011111b
+out key,al
+ret
+
+decimal:
+mov bl,2d
+mov cl,4d
+
+
+again:
+ror dl,cl
+mov ah,dl
+and ah,00001111h
+cmp ah,9d
+jg letter
+add ah,48d
+jmp print
+
+letter:
+add ah,55d
+
+print:
+call charout
+dec bl
+cmp bl,0d
+je exit
+jmp again
+
+exit:
+ret
+
+code ends
+end
+
+
+
+
+
+
+
+

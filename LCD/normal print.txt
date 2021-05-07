@@ -1,0 +1,62 @@
+
+CODE	SEGMENT
+	ASSUME	CS:CODE,DS:CODE,ES:CODE,SS:CODE
+org 1000h
+call allclr
+
+call cursor1
+
+mov si,offset ab
+call string
+
+x:
+CALL DELAY
+ab db 'Taani',00h
+
+allclr:
+mov ah,01h
+jmp out1
+
+cursor1:
+mov ah,02h
+jmp out1
+
+out1:
+call busy
+mov al,ah
+out 00h,al
+ret
+
+string:
+mov ah,cs:[si]
+cmp ah,00h
+je return
+call busy
+mov al,ah
+out 04h,al
+inc si
+jmp string
+
+return:
+ret
+
+delay:
+mov cx,0ffffh
+f:
+dec cx
+jnz f
+jmp x
+
+
+busy:
+in al,02h
+test al,80h
+jnz busy
+ret
+
+	
+
+CODE	ENDS
+	END
+
+

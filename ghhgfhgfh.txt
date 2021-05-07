@@ -1,0 +1,109 @@
+
+code segment
+Assume CS:code, DS:code, SS:code, ES:code
+org 1000h
+
+mov al, 80h
+out 1fh,al ; 7 segment and led
+out 1eh, al ; dot matrix
+mov al, 0ffh ; clearing 7 segment
+out 19h, al
+;--------
+mov al, 11111111b  ; instr for red light
+out 18h, al         ; port A
+
+mov ah, 00000001b
+xor bx, bx
+mov bx, 01h
+
+L11:
+
+    mov si, offset matrix
+    mov di, offset numbs
+
+L22:
+    cmp bx, 01h
+    je red
+    cmp bx, 02h
+    je  yellow
+    cmp bx, 03h
+    je   red2
+    cmp bx, 04h
+    je green
+    jg reset
+L33:
+    mov al, cs:[si]
+    out 1ah, al
+    mov al, ah
+    out 1ch, al
+    mov cx, 0fh
+    call delay
+    rol ah, 1
+     inc si
+     
+    mov al, es:[di]
+    cmp al, 00h
+    je L11
+    
+    out 19h, al
+    mov cx, 0ffh
+    call delay
+    inc di
+    inc bx
+
+    ;jnc L11
+    jmp L22
+;------
+
+
+
+
+
+reset:
+      mov bl, 01h
+      jmp L33
+yellow:
+       mov al, 04h
+       out 1bh, al
+         mov cx, 0ffffh
+       call delay
+       jmp L33
+red:
+    mov al, 01h
+    out 1bh, al
+      mov cx, 0ffffh
+    call delay
+    jmp L33
+green:
+      mov al, 02h
+      out 1bh, al
+       mov cx, 0ffffh
+      call delay
+      jmp L33
+red2:
+     mov al, 08h
+     out 1bh, al
+      mov cx, 0ffffh
+     call delay
+     jmp L33
+ delay:
+
+      top:
+      nop
+      nop
+      nop
+      nop
+      nop
+      nop
+      nop
+      nop
+      nop
+      nop
+      loop top
+      ret
+
+numbs db 0C0h, 0f9h, 0a4h, 0b0h, 099h, 092h, 082h, 00h
+matrix db 00000000b, 10111111b, 11011111b, 11101111b, 11101111b, 11011111b, 10111111b, 00000000b
+
+      code ends
+      end

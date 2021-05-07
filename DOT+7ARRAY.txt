@@ -1,0 +1,76 @@
+    ;;;;;PRINT M IN DOT MATRIX
+
+
+
+     CODE SEGMENT
+     ASSUME CS : CODE,DS:CODE,ES:CODE,SS:CODE
+     ORG 1000H
+
+      MOV AL,80H
+      OUT 1FH,AL
+
+     MOV AL,80H
+     OUT 1EH,AL
+
+
+
+      MOV AL, 0FFH
+      OUT 18H,AL
+    L1:
+    MOV SI, OFFSET MATRIX2
+    L4:
+    MOV AL, CS:[SI]
+    CMP AL, 00H
+    JE L5
+    
+    OUT 19H, AL
+    INC SI
+
+
+      D2:
+       NOP
+      NOP
+      NOP
+      NOP
+      NOP
+
+      LOOP D2
+      JMP L4
+      
+
+      L5:
+
+      MOV DX,20
+      L3:
+      CMP DX,0
+      JE L1
+      MOV AH, 00000001B
+      MOV DI, OFFSET MATRIX
+      L2:
+      MOV AL, ES:[DI]
+      OUT 1AH, AL
+
+      MOV AL, AH
+      OUT 1CH, AL
+
+      MOV CX, 3000
+
+
+      DELAY1:
+      NOP
+
+      LOOP DELAY1
+
+      INC DI
+      ROL AH,1
+      JNC L2
+      DEC DX
+      JMP L3
+
+      MATRIX DB 01111110B,00111100B, 00011000B,  00000000B, 00000000B,00011000B,00111100B,01111110B
+      MATRIX2 DB 0C0H, 0F9H,0A4H,0B0H, 00H
+
+
+
+     CODE ENDS
+     END

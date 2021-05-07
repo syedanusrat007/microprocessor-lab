@@ -1,0 +1,83 @@
+code segment
+assume cs:code,ds:code,es:code,ss:code
+org 1000h
+
+ir equ 00h
+st equ 02h
+dr equ 04h
+
+strt:
+call clear
+call crsr
+call dispon
+call rev
+
+mov si,offset data
+
+call string
+
+x:
+jmp delay
+data db 'MIST',00h
+
+rev:
+mov ah,00000101b
+jmp out
+ret
+
+dispon:
+mov ah,00001111b
+jmp out
+ret
+
+
+clear:
+mov  ah,01h
+jmp out
+
+crsr:
+mov ah,0c5h
+
+out:
+call busy
+mov al,ah
+out ir,al
+ret
+
+busy:
+mov dx,st
+in al,dx
+test al,80h
+jnz busy
+ret
+
+string:
+mov ah,cs:[si]
+cmp ah,00h
+je return
+
+call busy
+mov al,ah
+out dr,al
+inc si
+jmp string
+
+return:
+ret
+
+delay:
+mov cx,0ffffh
+f:
+loop f
+mov ah,00001000b
+call busy
+mov al,ah
+out ir,al
+
+mov cx,0ffffh
+top:
+loop top
+jmp strt
+
+code ends
+end

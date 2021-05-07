@@ -1,0 +1,50 @@
+CODE	SEGMENT
+	ASSUME	CS:CODE,DS:CODE,ES:CODE,SS:CODE
+	;
+org 1000h
+mov al,10000000b
+mov bl,00000001b
+out 1eh,al
+ff:
+mov cx,30
+start:
+      dec cx
+      cmp cx,0
+      je sesh
+      mov si,offset data
+      level: mov al,0ffh
+             out 18h,al
+             mov al,cs:[si]
+             cmp al,0ffh
+             je start
+             out 1ah,al
+             inc si
+
+             mov al,bl
+             out 1ch,al
+             rol bl,1
+             mov dx,300
+             delay:
+                  nop
+                  nop
+                  nop
+                  dec dx
+                  cmp dx,0
+                  jne delay
+             jmp level
+
+sesh:
+     mov al,11111111b
+     out 1ch,al
+     mov al,0ffh
+     out 1ah,al
+     mov cx,0ffffh
+     wait:
+          nop
+          nop
+          nop
+          loop wait
+     jmp ff
+data db 00h,01111110b,01111110b,00h,00h,01110110b,01110110b,01110000b,0ffh
+code ends
+end

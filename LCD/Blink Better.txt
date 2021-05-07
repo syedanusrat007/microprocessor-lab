@@ -1,0 +1,87 @@
+
+CODE	SEGMENT
+	ASSUME	CS:CODE,DS:CODE,ES:CODE,SS:CODE
+org 1000h
+
+
+call disp
+call allclr
+call cursor1
+mov si,offset ab
+
+
+call string
+x:                               ;shb kicchu jst ek bar kore jst BLINK er kaj tuku bar bar krle e hoe
+call delay
+call dispoff
+call delay
+call disp
+call delay
+jmp x
+
+ab db 'Taani',00h
+
+disp:
+mov ah,00001100b     ; cursor na dekhnr jnno n blink na koranr jnno
+jmp out1
+
+dispoff:
+mov ah,00001000b
+jmp out1
+
+shft:
+mov ah,00011100b
+jmp out1
+
+
+
+allclr:
+mov ah,01h
+jmp out1
+
+cursor1:
+mov ah,0c2h
+jmp out1
+
+out1:
+call busy
+mov al,ah
+out 00h,al
+ret
+
+string:
+mov ah,cs:[si]
+cmp ah,00h
+je return
+call busy
+mov al,ah
+out 04h,al
+inc si
+jmp string
+
+return:
+ret
+
+delay:
+mov cx,0ffffh
+top:
+nop
+nop
+nop
+loop top
+ret
+
+
+
+busy:
+in al,02h
+test al,80h
+jnz busy
+ret
+
+	
+
+CODE	ENDS
+	END
+
+

@@ -1,0 +1,37 @@
+  
+;;;;;;LED OUTPUT
+
+   CODE SEGMENT
+     ASSUME CS : CODE,DS:CODE,ES:CODE,SS:CODE
+     ORG 1000H
+     
+
+     
+     MOV AL,80H
+     OUT 1FH,AL
+     MOV AL,0FFH
+    OUT 19H,AL
+
+ L1:
+     
+     MOV AL,01H
+     OUT 1BH,AL
+DELEAY:
+NOP
+NOP
+NOP
+LOOP DELEAY
+      MOV AL,0H
+      OUT 1BH,AL
+      
+ DELEAY2:
+NOP
+NOP
+NOP
+LOOP DELEAY2
+
+      
+      JMP L1
+     
+     CODE ENDS
+     END

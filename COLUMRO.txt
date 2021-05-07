@@ -1,0 +1,40 @@
+     CODE SEGMENT
+     ASSUME CS : CODE,DS:CODE,ES:CODE,SS:CODE
+     ORG 1000H
+     
+
+     
+     MOV AL,80H
+     OUT 1EH,AL
+     
+      MOV AL,0FFH
+      OUT 19H,AL
+      MOV AL, 0FFH
+      OUT 18H,AL
+
+      MOV AL,00000000B
+      OUT 1AH,AL
+      
+      L1:
+      MOV AL,00000001B  ;MOV AL,10000000B
+      L2:
+      OUT 1CH,AL
+      
+      
+      DELAY1:
+      NOP
+      NOP
+      NOP
+      NOP
+      NOP
+      LOOP DELAY1
+      
+      ROL AL,1  ;ROR AL,1
+      JC L1
+      JMP L2
+
+
+
+     
+     CODE ENDS
+     END

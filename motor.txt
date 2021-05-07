@@ -1,0 +1,31 @@
+CODE SEGMENT
+
+ASSUME	CS:CODE,DS:CODE,ES:CODE,SS:CODE
+
+org 1000h
+
+mov al,80h
+out 1fh,al
+
+mov al,00010001b
+mov bl,00110011b
+
+
+L1:out 1bh,al
+       call timer
+       rol al,1
+       xchg al,bl
+       jmp L1
+
+timer:
+       mov cx,0ffffh
+x:
+       nop
+       nop
+       loop x
+       ret
+       
+CODE	ENDS
+	END
+
+		

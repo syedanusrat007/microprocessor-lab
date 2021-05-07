@@ -1,0 +1,150 @@
+code segment
+assume cs:code,es:code,ss:code,ds:code
+
+org 1000h
+
+ir_wr equ 00h
+st_rd equ 02h
+dr_wr equ 04h
+key_f equ 03h
+key equ 01h
+
+clear:
+mov ah,00000001B
+call out
+
+cursor_home:
+mov ah,02h
+call out
+
+mov si,offset ab
+
+string:
+
+mov ah,cs:[si]
+cmp ah,00h
+
+je delay
+
+call busy
+
+mov al,ah
+out dr_wr,al
+inc si
+
+jmp string
+
+delay:
+
+mov cx,0ffffh
+F:
+nop
+nop
+loop F
+
+cursor_line2:
+
+mov ah,11000000B
+call out
+
+scan:
+in al,key_f
+test al,10000000B
+jnz scan
+
+in al,key
+and al,00011111B
+out key,al
+
+mov bx,2
+mov dl,al
+
+decimal:
+cmp bx,0
+je done
+
+mov cl,4
+rol dl,cl
+
+mov ah,dl
+and ah,00001111B
+
+cmp ah,10D
+jb digit
+jge letter
+
+digit:
+add ah,48D
+jmp to
+
+letter:
+add ah,55D
+
+to:
+call charout
+dec bx
+inc_cursor:
+mov ah,00000110B
+call out
+
+jmp decimal
+
+
+
+charout:
+
+call busy
+mov al,ah
+out dr_wr,al
+
+mov cx,0ffffh
+delay2:
+nop
+nop
+loop delay2
+
+ret
+
+out:
+call busy
+mov al,ah
+out ir_wr,al
+ret
+
+busy:
+in al,st_rd
+test al,10000000B
+jnz busy
+ret
+
+done:
+mov cx,0ffffh
+delay3:
+nop
+nop
+loop delay3
+
+mov al,80h
+out 1fh,al
+
+mov al,00010001B
+
+L1:
+out 1bh,al
+call timer
+rol al,1
+jmp L1
+
+timer:
+mov cx,0ffffh
+top:
+nop
+nop
+loop top
+ret
+
+ab db 'KEYCODE',00h
+
+
+code ends
+end

@@ -1,0 +1,143 @@
+   
+;;;;;BANGLA CODE FOR PATERN PRINT
+
+  CODE SEGMENT
+     ASSUME CS : CODE,DS:CODE,ES:CODE,SS:CODE
+     ORG 1000H
+     
+
+     
+     MOV AL,80H
+     OUT 1EH,AL
+     
+      MOV AL,0FFH
+      OUT 19H,AL
+ L1:
+      MOV AL, 0FFH
+      OUT 1AH,AL
+      MOV AL, 0FEH
+      OUT 18H,AL
+      MOV AL, 0FFH
+      OUT 1CH,AL
+  DELAY:
+      NOP
+      NOP
+      NOP
+      NOP
+      NOP
+      LOOP DELAY
+      
+      MOV AL, 0FFH
+      OUT 18H,AL
+      MOV AL, 11111101B
+      OUT 1AH,AL
+      MOV AL, 01111110B
+      OUT 1CH,AL
+
+  DELAY1:
+      NOP
+      NOP
+      NOP
+      NOP
+      NOP
+      LOOP DELAY1
+      
+        MOV AL, 0FFH
+      OUT 1AH,AL
+      MOV AL, 11111011B
+      OUT 18H,AL
+      MOV AL,  00111100B
+      OUT 1CH,AL
+      
+       DELAY2:
+      NOP
+      NOP
+      NOP
+      NOP
+      NOP
+      LOOP DELAY2
+      
+        MOV AL, 0FFH
+      OUT 18H,AL
+      MOV AL, 11110111B
+      OUT 1AH,AL
+      MOV AL, 00011000B
+      OUT 1CH,AL
+      
+      DELAY3:
+      NOP
+      NOP
+      NOP
+      NOP
+      NOP
+      LOOP DELAY3
+      
+       MOV AL, 0FFH
+      OUT 1AH,AL
+      MOV AL,11101111B
+      OUT 18H,AL
+      MOV AL,  00011000B
+      OUT 1CH,AL
+      
+       DELAY4:
+      NOP
+      NOP
+      NOP
+      NOP
+      NOP
+      LOOP DELAY4
+      
+       MOV AL, 0FFH
+      OUT 18H,AL
+      MOV AL, 11011111B
+      OUT 1AH,AL
+      MOV AL,  00111100B
+      OUT 1CH,AL
+      
+       DELAY5:
+      NOP
+      NOP
+      NOP
+      NOP
+      NOP
+      LOOP DELAY5
+      
+      MOV AL, 0FFH
+      OUT 1AH,AL
+      MOV AL,10111111B
+      OUT 18H,AL
+      MOV AL,  01111110B
+      OUT 1CH,AL
+      
+
+       DELAY6:
+      NOP
+      NOP
+      NOP
+      NOP
+      NOP
+      LOOP DELAY6
+      
+      MOV AL, 0FFH
+      OUT 18H,AL
+      MOV AL, 01111111B
+      OUT 1AH,AL
+      MOV AL,  11111111B
+      OUT 1CH,AL
+      
+
+       DELAY7:
+      NOP
+      NOP
+      NOP
+      NOP
+      NOP
+      LOOP DELAY7
+      
+      
+    JMP L1
+
+
+     
+     CODE ENDS
+     END
